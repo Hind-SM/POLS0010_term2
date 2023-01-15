@@ -1,0 +1,37 @@
+---
+title: "Week11"
+output: html_document
+date: "2023-01-13"
+---
+### a) Fit a regression model (without interaction terms) to estimate the effect of education and sex on hourly income, saving your model as an object called “mod1”
+
+```{r cars}
+mod1 <- lm(hrinc~sex+educ, data1)
+summary(mod1)
+```
+###b) interpretation: we can reject the null hypothesis because the p-values for both explanatory variables are below 0.05
+
+###c) 
+```{r pressure, echo=FALSE}
+library(ggplot2)
+plotdata <- data.frame(
+"names"= as.factor(c("Female","Years of Education")),
+"coefs" = coef(mod1)[2:3],
+"lower" = confint(mod1)[2:3,1],
+"upper" = confint(mod1)[2:3,2]
+)
+ggplot(plotdata, aes(x=coefs, y=names)) +
+geom_point(col="red", size=3) +
+geom_errorbar(aes(xmin=lower, xmax=upper),
+col="red", width =0.1, size=1) +
+geom_vline(xintercept = 0)+
+xlim(-4.5,4.5)+
+theme_bw() +
+xlab("Estimated Coefficient") +
+ylab("") +
+ggtitle("Estimated effects of sex and education on hourly earnings\n
+(Coefficients and 95% Confidence Intervals)") +
+theme(axis.text = element_text(size=10),
+plot.title = element_text(size=12))
+
+```
